@@ -1,0 +1,151 @@
+{
+  "name": "researcher",
+  "nodes": [
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "url"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "da1ebfaa-cc9b-43b7-84b6-99d1a37a70e9",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.url }}",
+        "options": {
+          "allowUnauthorizedCerts": true
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        208,
+        0
+      ],
+      "id": "7bc33e66-3725-407e-95f5-a33d486ff415",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "jsCode": "// This script cleans raw HTML and trims text to save tokens\nconst rawHTML = items[0].json.data || \"\"; // Adjust key based on HTTP output\nconst cleanText = rawHTML.replace(/<[^>]*>/g, ' ').replace(/\\s+/g, ' ').trim();\nreturn [{ json: { text: cleanText.substring(0, 2000) } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        416,
+        0
+      ],
+      "id": "905a368c-2915-4f1d-94b5-d10c0dfe6794",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        640,
+        0
+      ],
+      "id": "9f46ec9f-3635-4ed6-8a27-becc8eb74062",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "model": "llama-3.1-8b-instant",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        640,
+        192
+      ],
+      "id": "placeholder-id",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "your-credential-id-here",
+          "name": "Groq account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "d96a375a-956e-44ca-9ff3-cdea442e4d29",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "39833c5d17a1f1d96aff61efe9d66f9d2c2ec26b2e81a22217b80da129f966b5"
+  },
+  "id": "IHXJSKXqObzgjWLh",
+  "tags": []
+}

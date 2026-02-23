@@ -1,0 +1,104 @@
+{
+  "name": "social_strategist",
+  "nodes": [
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "hooks"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -400,
+        0
+      ],
+      "id": "f4b64cfc-e349-4fdf-af8c-c696195cb009",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.hooks }}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "You are a world-class Social Media Strategist. You will receive 3 hooks from an article. Your task is to:  1-Create a 5-tweet Twitter thread that is engaging and high-energy.  2-Create one professional yet punchy LinkedIn post.  3-Ensure the tone is consistent across both platforms.  4-Return the output clearly labeled for each platform."
+            }
+          ]
+        },
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        -144,
+        0
+      ],
+      "id": "613e7667-9441-4e1b-b8ad-564ef26f78d1",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "model": "llama-3.1-8b-instant",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        -144,
+        176
+      ],
+      "id": "placeholder-id",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "your-credential-id-here",
+          "name": "Groq account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "0f0c1e49-b12f-43d1-a148-2f2ec754be19",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "39833c5d17a1f1d96aff61efe9d66f9d2c2ec26b2e81a22217b80da129f966b5"
+  },
+  "id": "wXnkyAbQd65P77rZ",
+  "tags": []
+}

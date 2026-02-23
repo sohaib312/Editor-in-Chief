@@ -1,0 +1,227 @@
+{
+  "name": "Master Agent - Editor in Chief",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        0,
+        0
+      ],
+      "id": "85b61c7d-2718-4856-ba72-f80b8ce4b4fa",
+      "name": "When chat message received",
+      "webhookId": "ab122c6b-7825-45ad-939d-e07596469147"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        256,
+        0
+      ],
+      "id": "988d177c-237b-456c-84c1-b34deed812bf",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": "llama-3.1-8b-instant",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        256,
+        160
+      ],
+      "id": "placeholder-id",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "your-credential-id-here",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 2
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        352,
+        256
+      ],
+      "id": "37066c88-aa52-4653-ac79-5e1964cd0803",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "description": "Use this tool to get 3 interesting hooks from a URL. The input should be a valid URL string.",
+        "workflowId": {
+          "__rl": true,
+          "value": "IHXJSKXqObzgjWLh",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/IHXJSKXqObzgjWLh",
+          "cachedResultName": "researcher"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "url": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('url', ``, 'string') }}"
+          },
+          "matchingColumns": [
+            "url"
+          ],
+          "schema": [
+            {
+              "id": "url",
+              "displayName": "url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        528,
+        192
+      ],
+      "id": "0ff19795-dbf8-4898-96de-989ebcdda999",
+      "name": "Call 'researcher'"
+    },
+    {
+      "parameters": {
+        "description": "Use this tool to turn hooks into a Twitter thread and LinkedIn post. Input must be the hooks provided by the researcher.",
+        "workflowId": {
+          "__rl": true,
+          "value": "wXnkyAbQd65P77rZ",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/wXnkyAbQd65P77rZ",
+          "cachedResultName": "social_strategist"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "hooks": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('hooks', ``, 'string') }}"
+          },
+          "matchingColumns": [
+            "hooks"
+          ],
+          "schema": [
+            {
+              "id": "hooks",
+              "displayName": "hooks",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        656,
+        128
+      ],
+      "id": "6e076442-2158-40be-a2ff-7b2befd4e9a2",
+      "name": "Call 'social_strategist'"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        []
+      ]
+    },
+    "Call 'researcher'": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call 'social_strategist'": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "2931e952-0d98-4f9c-9587-555b9449d3de",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "39833c5d17a1f1d96aff61efe9d66f9d2c2ec26b2e81a22217b80da129f966b5"
+  },
+  "id": "xMZHPXwt6toEfLLx",
+  "tags": []
+}
